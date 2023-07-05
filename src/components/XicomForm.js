@@ -28,7 +28,8 @@ const XicomForm = () => {
                 file_type: "",
                 file_url: ""
             }
-        ]
+        ],
+        files_array: [""]
     })
 
     const onFormSubmit = (e) => {
@@ -47,8 +48,28 @@ const XicomForm = () => {
             return;
         }
 
+    
+        let rowFormData = new FormData()
+        rowFormData.append("first_name", formData.first_name)
+        rowFormData.append("last_name", formData.last_name)
+        rowFormData.append("email", formData.email)
+        rowFormData.append("dob", formData.dob)
+        rowFormData.append("residential_address[street_1]", formData.residential_address.street_1)
+        rowFormData.append("residential_address[street_2]", formData.residential_address.street_2)
+        rowFormData.append("same_addresses", formData.same_addresses)
+    
+        formData.files.forEach((fileItem, idx) => {
+            rowFormData.append(`files[${idx}][file_name]`, fileItem.file_name)
+            rowFormData.append(`files[${idx}][file_type]`, fileItem.file_type)
+            rowFormData.append(`files[${idx}][file_url]`, "")
+        })
+        
+        formData.files_array.forEach((fileItem) => {
+            rowFormData.append("files_array", fileItem)
+        })
+        
         // api call to add the form 
-        axios.post(`${API}/register`, formData)
+        axios.post(`${API}/register`, rowFormData)
             .then((res) => {
                 const { status } = res.data;
                 if (status === "success") {
@@ -65,6 +86,7 @@ const XicomForm = () => {
     const addMoreFiles = () => {
         setFormData(prev => ({
             ...prev,
+            files_array: [...prev.files_array, ""],
             files: [
                 ...prev.files,
                 {
@@ -72,15 +94,18 @@ const XicomForm = () => {
                     file_type: "",
                     file_url: ""
                 }
-            ]
+            ],
         }))
     }
 
     const deleteDocument = (idx) => {
         const allFiles = formData.files.filter((_, doc_idx) => doc_idx !== idx);
+        const allFilesArray = formData.files_array.filter((_, doc_idx) => doc_idx !== idx);
+
         setFormData(prev => ({
             ...prev,
-            files: allFiles
+            files: allFiles,
+            files_array: allFilesArray
         }))
     }
 
@@ -246,6 +271,7 @@ const XicomForm = () => {
                                     onAddMore={addMoreFiles}
                                     onDelete={() => deleteDocument(idx)}
                                     allFiles={formData.files}
+                                    filesArray={formData.files_array}
                                 />
 
                             )

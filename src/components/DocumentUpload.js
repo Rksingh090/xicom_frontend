@@ -4,11 +4,8 @@ import React, { useRef } from 'react'
 import { FaPlus } from 'react-icons/fa';
 import { BsUpload } from 'react-icons/bs';
 import { AiOutlineDelete } from 'react-icons/ai';
-import { API } from '../constant';
 
-import axios from 'axios';
-
-const DocumentUpload = ({ file, allFiles, onChangeFile, id, onAddMore, onDelete }) => {
+const DocumentUpload = ({ file, allFiles, filesArray, onChangeFile, id, onAddMore, onDelete }) => {
     const docRef = useRef(null);
 
     const handleChangeFile = (e) => {
@@ -53,21 +50,12 @@ const DocumentUpload = ({ file, allFiles, onChangeFile, id, onAddMore, onDelete 
             }
         }
 
-        const formdata = new FormData();
-        formdata.append("file", files[0]);
-        axios.post(`${API}/upload`, formdata)
-            .then((res) => {
-                const { status, fileUrl } = res.data;
-                console.log(res.data);
-                if (status === "success") {
-                    const fileData = allFiles;
-                    fileData[id].file_url = fileUrl;
-                    onChangeFile(prev => ({
-                        ...prev,
-                        files: fileData
-                    }))
-                }
-            })
+        let files_array = filesArray;
+        files_array[id] = files[0];
+        onChangeFile(prev => ({
+            ...prev,
+            files_array
+        }))
     }
 
     return (
