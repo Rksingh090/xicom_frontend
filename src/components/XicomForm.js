@@ -122,7 +122,7 @@ const XicomForm = () => {
         <div className="xicomFormPage">
             <form onSubmit={onFormSubmit} className='mainForm'>
                 <div>
-                    <h2>Xicom Technologies</h2>
+                    <h2>Xicom Technologies (Rishab Singh)</h2>
                 </div>
                 <div className="gridCol2">
                     <div className="inputGroup">
