@@ -1,1 +1,1 @@
-export const API = "http://localhost:6789"
+export const API = "http://xicom-backend:6789"
