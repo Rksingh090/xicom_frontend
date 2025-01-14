@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
 import XicomForm from './components/XicomForm';
-import {API} from './constants';
+import {API} from 'constants';
 import axios from 'axios';
 
 function App() {
